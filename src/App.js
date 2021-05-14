@@ -113,7 +113,6 @@ const columns = [
 //    const data = await res.json()
 //  }
 
-// for {this.state.email}
 class App extends Component {
 
   constructor(props) {
@@ -322,12 +321,13 @@ renderRows() {
 
        {this.state.loggedIn && this.state.dataRows &&
           <div class="Result-Table">
-            <p> </p> <p> <div class="App-Label"> List of expenses </div></p> <p> </p>
+            <p> </p> <p> <div class="App-Label"> List of expenses for {this.state.email} </div></p> <p> </p>
+            <p> </p> <p> <div class="App-Label"> Payment Time Format: YYYY-MM-DD HH:mm:ss </div></p> <p> </p>
             <Grid>
                 <Grid.Row style={{ padding: '10px 0px 0px 0px'}} width={16}>
                 <Grid.Column width={16}>
                 <MaterialTable
-        //options={{ paging: false }}
+                //options={{ paging: false }}
                 icons={tableIcons}
                 title="Expense List"
                 columns={columns}
