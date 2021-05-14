@@ -113,6 +113,7 @@ const columns = [
 //    const data = await res.json()
 //  }
 
+// for {this.state.email}
 class App extends Component {
 
   constructor(props) {
@@ -149,18 +150,17 @@ class App extends Component {
 authenticateUser = async () => {
    try {
     let data = {};
-    data.name = 'suthakar bose';
     data.email = this.state.email;
-    data.locale = 'en';
-    console.log('authUrl:',config.userValidation);
-    console.log('payload:',data);
-    await axios.post(config.userValidation, data).then(
+    data.password = this.state.passcode;
+    console.log('authUrl:',config.dbhost+config.authuser);
+    await axios.post(config.dbhost+config.authuser, data).then(
       res => {
         console.log('response2',res.data);
         this.setState({
          loggedIn: true,
          error: ''
        });
+       this.listExpenses();
       })
       .catch(
         error => {
@@ -180,7 +180,7 @@ listExpenses = async () => {
     console.log('listExpenses:',config.dbhost+config.listExpenses);
     let header = {
       headers: {
-        authorization: 'value',
+        authorization: this.state.email,
       }
     }
     await axios.get(config.dbhost+config.listExpenses, header).then(
@@ -208,18 +208,20 @@ addExpense = (expense) => {
   expense.status = 'Cleared';
   console.log('addExpense',config.dbhost+config.createExpense);
   console.log('expense',expense);
-  delete expense.tableData;
+  console.log('email',this.state.email);
+  //delete expense.tableData;
   let header = {
     headers: {
-      authorization: 'value',
+      authorization: this.state.email,
     }
   };
   try {
       axios.post(config.dbhost+config.createExpense, expense, header).then(res => {
       console.log(res);
       this.listExpenses();
-      })
+      });
     } catch (err) {
+      this.listExpenses();
       console.log(err.message);
     }
 }
@@ -232,7 +234,7 @@ updatedExpense = (expense) => {
   delete expense.paymentdate;
   let header = {
     headers: {
-      authorization: 'value',
+      authorization: this.state.email,
     }
   };
   try {
@@ -250,7 +252,7 @@ deleteExpense = (expense) => {
   console.log('expense',expense);
   let header = {
     headers: {
-      authorization: 'value',
+      authorization: this.state.email,
     }
   };
   try {
@@ -313,15 +315,14 @@ renderRows() {
 						      />
 				  </p>
 				  <p>
-					<Button class="ui button" onClick={this.listExpenses} > <b> Submit </b> </Button>
+					<Button class="ui button" onClick={this.authenticateUser} > <b> Signin / Login </b> </Button>
 				  </p>
 			  </div>
 		   }
 
-       {this.state.loggedIn && this.state.dataRows && this.state.dataRows.length > 0 &&
+       {this.state.loggedIn && this.state.dataRows &&
           <div class="Result-Table">
-            <p> </p> <p> <div class="App-Label"> List of my expenses </div></p> <p> </p>
-            <p> </p> <p> <div class="App-Label"> </div></p> <p> </p>
+            <p> </p> <p> <div class="App-Label"> List of expenses </div></p> <p> </p>
             <Grid>
                 <Grid.Row style={{ padding: '10px 0px 0px 0px'}} width={16}>
                 <Grid.Column width={16}>
@@ -377,7 +378,12 @@ renderRows() {
 
         </div>
       }
-
+      {this.state.error &&
+       <div class="App-Error">
+         <p> </p> <p> </p>
+         <input type="text" name='error'  placeholder={this.state.error} placeholderTextColor='ff0000' value={this.state.error} readonly="" style={{color: 'red'}} />
+       </div>
+      }
 
 		</header>
 	  </div>
