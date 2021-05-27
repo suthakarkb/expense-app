@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 export default {
-  "dbhost": "http://52.237.97.172:3000/",
+  "dbhost": "",
   "userValidation": "api/user",
   "createExpense": "api/expense",
   "updateExpense": "api/expense",

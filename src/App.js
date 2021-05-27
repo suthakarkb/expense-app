@@ -306,7 +306,7 @@ renderRows() {
 				  <p>
 
 								  <GoogleLogin
-									         clientId="997832158711-ujmuftojk6hm1qin07478mbce64bkolh.apps.googleusercontent.com"
+									         clientId="Masked"
 									         buttonText="Google Signin"
 									         onSuccess={responseGoogle}
 									         onFailure={responseGoogle}
